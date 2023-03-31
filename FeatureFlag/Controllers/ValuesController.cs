@@ -1,6 +1,7 @@
 ﻿using FeatureFlag.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,43 +13,46 @@ namespace FeatureFlag.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly Settings _settings;
+        private readonly IFeatureManager _featureManager;
 
-        public ValuesController(IOptionsSnapshot<Settings> options)
+        public ValuesController(IOptionsSnapshot<Settings> options, IFeatureManager featureManager)
         {
             _settings = options.Value;
+            _featureManager = featureManager;
         }
 
         // GET: api/<ValuesController>
         [FeatureGate(MyFeatureFlags.FeatureA)]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
+            if (await _featureManager.IsEnabledAsync(MyFeatureFlags.FeatureA))
+            {
+                // Run the following code
+            }
+            if (await _featureManager.IsEnabledAsync(MyFeatureFlags.FeatureB))
+            {
+                // Run the following code
+            }
+
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<ValuesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET: api/<ValuesController>
+        [FeatureGate(MyFeatureFlags.FeatureB)]
+        [HttpGet("Id")]
+        public async Task<IEnumerable<string>> Get(int Id)
         {
-            return "value";
-        }
+            if (await _featureManager.IsEnabledAsync(MyFeatureFlags.FeatureA))
+            {
+                // Run the following code
+            }
+            if (await _featureManager.IsEnabledAsync(MyFeatureFlags.FeatureB))
+            {
+                // Run the following code
+            }
 
-        // POST api/<ValuesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return new string[] { "value1", "value2" };
         }
     }
 }
