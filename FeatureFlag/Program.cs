@@ -3,19 +3,19 @@ using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var builder = Host.CreateDefaultBuilder(args)
-//        .ConfigureWebHostDefaults(webBuilder =>
-//            webBuilder.ConfigureAppConfiguration(config =>
-//            {
-//                var settings = config.Build();
-//                config.AddAzureAppConfiguration(options =>
-//                    options.Connect(settings["AppConfig"]).UseFeatureFlags());
-//            }).UseStartup<Program>());
+builder.Host.ConfigureWebHostDefaults(webBuilder =>
+{
+    webBuilder.ConfigureAppConfiguration(config =>
+    {
+        var settings = config.Build();
+        config.AddAzureAppConfiguration(options =>
+            options.Connect(settings["AppConfig"]).UseFeatureFlags());
+    }).UseStartup<Program>();
+});
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFeatureManagement();

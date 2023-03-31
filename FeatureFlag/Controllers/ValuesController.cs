@@ -1,6 +1,7 @@
 ﻿using FeatureFlag.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.FeatureManagement.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,6 +19,7 @@ namespace FeatureFlag.Controllers
         }
 
         // GET: api/<ValuesController>
+        [FeatureGate(MyFeatureFlags.FeatureA)]
         [HttpGet]
         public IEnumerable<string> Get()
         {
