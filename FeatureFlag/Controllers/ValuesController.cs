@@ -4,8 +4,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.FeatureManagement;
 using Microsoft.FeatureManagement.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace FeatureFlag.Controllers
 {
     [Route("api/[controller]")]
@@ -35,7 +33,7 @@ namespace FeatureFlag.Controllers
                 // Run the following code
             }
 
-            return new string[] { "value1", "value2" };
+            return new string[] { _settings.Value1, _settings.Value2 };
         }
 
         // GET: api/<ValuesController>
