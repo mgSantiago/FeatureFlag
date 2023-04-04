@@ -4,27 +4,24 @@ using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var settings = builder.Configuration.GetSection(Settings.Key).Get<Settings>();
 
 builder.Configuration.AddAzureAppConfiguration(options =>
             options.Connect(builder.Configuration.GetConnectionString("AppConfig"))
-                .UseFeatureFlags(featureFlagOptions => {
-                })
-                .Select("TestApp:*", LabelFilter.Null)
+                .UseFeatureFlags()
+                .Select("FeatureFlag:*", LabelFilter.Null)
                 .ConfigureRefresh(refreshOptions =>
                 {
-                    refreshOptions.Register("TestApp:Settings:Sentinel", refreshAll: true);
+                    refreshOptions.Register("FeatureFlag:Settings:Sentinel", refreshAll: true);
                 })
             );
 
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddAzureAppConfiguration();
-
 builder.Services.AddFeatureManagement();
-
 builder.Services.Configure<Settings>(builder.Configuration.GetSection(Settings.Key));
 
 var app = builder.Build();

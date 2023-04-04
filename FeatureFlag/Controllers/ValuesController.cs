@@ -50,7 +50,7 @@ namespace FeatureFlag.Controllers
                 // Run the following code
             }
 
-            return new string[] { "value1", "value2" };
+            return new string[] { _settings.Value1, _settings.Value2 };
         }
     }
 }
